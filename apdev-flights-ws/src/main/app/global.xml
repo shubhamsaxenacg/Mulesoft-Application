@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ws="http://www.mulesoft.org/schema/mule/ws" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:context="http://www.springframework.org/schema/context" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd
+http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/current/mule-ws.xsd">
+    <context:property-placeholder location="flights-${env}.properties"/>
+    <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="${http.port}" doc:name="HTTP Listener Configuration"/>
+    <http:request-config name="United_HTTP_Request_Configuration" host="0.0.0.0" port="9090" doc:name="HTTP Request Configuration"/>
+    <http:request-config name="American_HTTP_Request_Configuration" protocol="HTTPS" host="mocksvc.mulesoft.com" port="443" basePath="/mocks/b73fa35b-0c0e-458b-9067-132dcc60a5e4" doc:name="HTTP Request Configuration">
+        <http:raml-api-configuration location="https://anypoint.mulesoft.com/exchange/api/v1/organizations/6b14a6a2-c409-4997-8ad2-b553c3b6748d/assets/6b14a6a2-c409-4997-8ad2-b553c3b6748d/american-flights-api/1.0.2/api/root"/>
+    </http:request-config>
+    <ws:consumer-config name="Delta_Web_Service_Consumer" wsdlLocation="http://localhost:9191/essentials/delta?wsdl
+" service="DeltaFlightsService" port="DeltaFlightsServiceImplPort" serviceAddress="http://localhost:9191/essentials/delta" doc:name="Web Service Consumer"/>
+</mule>
